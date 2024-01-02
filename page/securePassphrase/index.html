@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SFT Wallet</title>
+  <link rel="stylesheet" href="./css/index.css">
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jquery-i18n-properties/jquery-i18n-properties/jquery.i18n.properties.min.js"></script>
+
+</head>
+
+<body>
+  <div class="header">
+    <div class="logoBox">
+      <img src="../../assets/walletIndex/logo.svg" alt="logo">
+    </div>
+    <div class="languageBox">
+      <div class="custom-select">
+        <div class="select-selected">
+          <img src="../../assets/walletIndex/Language.svg" alt="arrow">
+          <p>Language</p>
+
+          <img src="../../assets/walletIndex/arrow.svg" alt="arrow">
+        </div>
+        <div class="select-items" style="display: none;">
+          <div data-value="en">English</div>
+          <div data-value="zh">中文</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="content">
+   <div class="securePassphraseBox">
+    <div class="securePassphraseTitleBox">
+      <img src="../../assets/createAccount/arrow.svg" alt="arrow">
+      <p data-lang="securePassphraseTitle">Setup Your Secure Passphrase</p>
+    </div>
+    <div class="securePassphraseTips">
+      <p data-lang="securePassphraseTips">
+        Write down the following words in order and keep them somewhere safe. Anyone with access to it will also have access to your account! You’ll be asked to verify your passphrase next.
+      </p>
+    </div>
+    <div class="passphraseBox">
+      <div class="passphraseCell" id="lab_m1">1.mide</div>
+      <div class="passphraseCell" id="lab_m2">2.economy</div>
+      <div class="passphraseCell" id="lab_m3">3.victory</div>
+      <div class="passphraseCell" id="lab_m4">4.poano</div>
+      <div class="passphraseCell" id="lab_m5">5.exit</div>
+      <div class="passphraseCell" id="lab_m6">6.accuse</div>
+      <div class="passphraseCell" id="lab_m7">7.piand</div>
+      <div class="passphraseCell" id="lab_m8">8.pet</div>
+      <div class="passphraseCell" id="lab_m9">9.victory</div>
+      <div class="passphraseCell" id="lab_m10">10.comin</div>
+      <div class="passphraseCell" id="lab_m11">11.computer</div>
+      <div class="passphraseCell" id="lab_m12">12.nice</div>
+    </div>
+ 
+    <a href="../verifyPhrase/index.html">
+      <button class="SecureBtn">
+        <p data-lang="continue">Continue</p>
+      </button>
+    </a>
+    <a href="../chooseMethod/index.html">
+      <button class="cancelBtn">
+        <p data-lang="cancel">cancel</p>
+      </button>
+    </a>
+   </div>
+  </div>
+  <script src="../../assets/js/init.js"></script>
+  <script src="./js/index.js"></script>
+	<script src="../../core/axios.min.js"></script>
+	<script src="../../core/babel-browser.min.js"></script>
+	<script src="../../core/bitcore-mnemonic.js"></script>
+	<script src="../../core/bignumber.js"></script>
+	<script src="../../core/lang/ch.js"></script>
+	<script src="../../core/lang/en.js"></script>
+	<script src="../../core/core.js"></script>
+	<script src="../../core/Base58.js"></script>
+
+	<script type="text/javascript">
+		var lan = getLanguage();
+	// $(function() {
+
+		var localMne = "";
+		window.subDirEntry = null;
+
+		window.onload = function() {
+			changeLang();
+
+			var mne = getMnemonic();
+			if(mne.mne != null) {
+				localMne = mne.mne;
+				var ws = mne.mne.split(' ');
+				for (var i = 1; i <= 12; i++) {
+					document.getElementById("lab_m" + i).innerHTML = i + "." + ws[i - 1];
+				}
+			}
+		}
+
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SFT Wallet</title>
+  <link rel="stylesheet" href="./css/index.css">
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/gh/jquery-i18n-properties/jquery-i18n-properties/jquery.i18n.properties.min.js"></script>
+
+</head>
+
+<body>
+  <div class="header">
+    <div class="logoBox">
+      <img src="../../assets/walletIndex/logo.svg" alt="logo">
+    </div>
+    <div class="languageBox">
+      <div class="custom-select">
+        <div class="select-selected">
+          <img src="../../assets/walletIndex/Language.svg" alt="arrow">
+          <p>Language</p>
+
+          <img src="../../assets/walletIndex/arrow.svg" alt="arrow">
+        </div>
+        <div class="select-items" style="display: none;">
+          <div data-value="en">English</div>
+          <div data-value="zh">中文</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="content">
+    <div class="usingPassphraseBox">
+      <div class="usingPassphraseTitleBox">
+        <img src="../../assets/createAccount/arrow.svg" alt="arrow">
+        <p data-lang="usingPassphraseTitle">Recover using Passphrase</p>
+      </div>
+      <div class="usingPassphraseTips">
+        <p data-lang="usingPassphraseTips">
+          Enter the backup passphrase associated with the account.
+        </p>
+      </div>
+      <div class="passphraseWord">
+        <p data-lang="passphraseWords">Passphrase (12 words)</p>
+        <textarea class="passphraseWordText" id="input_mnemonic" placeholder="Please enter 12 words, using spaces between words.">
+
+      </textarea>
+      </div>
+
+
+      <a href="javascript:window.clickImport();">
+        <button class="SecureBtn">
+          <p data-lang="findMyAccount">Find My Account</p>
+        </button>
+      </a>
+    </div>
+  </div>
+  <div class="errorBox">
+    <div class="errorTitle">
+      <div class="errorTitleLeft">
+        <img src="../../assets/usingPassphrase/error.svg" alt="error">
+        <p data-lang="Error">
+          Error
+        </p>
+      </div>
+      <div class="errorTitleRight">
+        <img src="../../assets/usingPassphrase/close.svg" alt="error">
+      </div>
+    </div>
+    <div class="errorInfoBox">
+      <div class="errorInfo">
+        <p data-lang="errorInfo">
+          The provided passphrase is not valid. Please check your passphrase and try again
+        </p>
+      </div>
+      <div class="errorTips">
+        <p data-lang="errorTips">
+          Provided seed phrase is not valid according to bip39-light standard
+        </p>
+      </div>
+    </div>
+ 
+
+
+  </div>
+  <script src="../../assets/js/init.js"></script>
+  <script src="./js/index.js"></script>
+  <script src="../../core/axios.min.js"></script>
+	<script src="../../core/babel-browser.min.js"></script>
+	<script src="../../core/bitcore-mnemonic.js"></script>
+	<script src="../../core/bignumber.js"></script>
+	<script src="../../core/lang/ch.js"></script>
+	<script src="../../core/lang/en.js"></script>
+	<script src="../../core/core.js"></script>
+	<script src="../../core/Base58.js"></script>
+
+	<script type="text/javascript">
+		var lan = getLanguage();
+		window.subDirEntry = null;
+
+		var wordlists = {};
+
+		function initWordList() {
+			var bip39 = Yoethwallet.wallet.bip39();
+			for(var i = 0; i < bip39.wordlists.EN.length; i++) {
+				var f = bip39.wordlists.EN[i].substr(0, 1);
+				var s = bip39.wordlists.EN[i].substr(1, 1);
+				if(wordlists[f] == null) {
+					wordlists[f] = {};
+				}
+				if(wordlists[f][s] == null) {
+					wordlists[f][s] = [];
+				}
+				wordlists[f][s].push(bip39.wordlists.EN[i]);
+			}
+		}
+
+		window.onload = function() {
+			changeLang();
+
+			var chain = getCreatedChain();
+			if(chain == null) {
+				chain = "SFT";
+			}
+			System.chain = chain;
+
+			//document.getElementById("input_name").value = getDefaultAccName();
+
+			initWordList();
+		}
+
+		window.changeMne = function() {
+			var ws = document.getElementById("input_mnemonic").value;
+			var wss = ws.split(' ');
+			for(var i = 0; i < wss.length; i++) {
+				if(wss[i].length >= 2) {
+					var fw = wss[i].substr(0, 1);
+					var sw = wss[i].substr(1, 1);
+
+					if(wordlists[fw] == null || wordlists[fw][sw] == null) {
+						document.getElementById("id_err_tip").innerHTML = (wss[i] + " " + lan.LAB_ETHG_MNEMONICIMPORT_INVALID_MNE);
+						document.getElementById("id_err_tip_show").style = "display:";
+						return;
+					}
+
+					var _flag = false;
+					for(var j = 0; j < wordlists[fw][sw].length; j++) {
+						if(wordlists[fw][sw][j].startsWith(wss[i])) {
+							_flag = true;
+							break;
+						}
+					}
+					if(_flag == false) {
+						document.getElementById("id_err_tip").innerHTML = (wss[i] + " " + lan.LAB_ETHG_MNEMONICIMPORT_INVALID_MNE);
+						document.getElementById("id_err_tip_show").style = "display:";
+						return;
+					}
+				}
+			}
+			document.getElementById("id_err_tip").innerHTML = "";
+			document.getElementById("id_err_tip_show").style = "display:none";
+		}
+
+		window.clickImport = function() {
+			//var accName = document.getElementById("input_name").value;
+			var accName = getDefaultAccName();
+			var mne = document.getElementById("input_mnemonic").value;
+			var pass = "";
+
+			var wallet = Yoethwallet.wallet;
+			var priv;
+
+			var bip39 = Yoethwallet.wallet.bip39();
+			var HDKey = Yoethwallet.wallet.HDKey();
+
+			if(!bip39.validateMnemonic(mne)) {
+				showToast('failure', "invalid mnemonics");
+				return;
+			}
+
+			var selectedPath = "m/44\'/60\'/0\'/0/0";
+			var key = HDKey.fromMasterSeed(bip39.mnemonicToSeed(mne));
+			priv = key.derive(selectedPath).privateKey;
+
+			wallet.fromPrivateKey(priv, function(err, keystore) {
+				if (err) {
+					// alert(err);
+					showToast("failure", err);
+					return;
+				}
+
+				var chain = getCreatedChain();
+				if(chain == null) {
+					chain = "SFT";
+				}
+
+				System.chain = chain;
+
+				var privKey = keystore.getPrivateKey();
+				var addr = keystore.getHexAddress(true);
+
+				setActiveChain(chain);
+
+				newAcc(accName, addr, chain);
+				setCurrent(accName, addr);
+
+				System.accName = accName;
+				System.addr = addr;
+				System.priv = privKey;
+
+				setAddrMnemonic(keystore.getHexAddress(true), mne);
+
+				window.location.href = "../balance/index.html"
+
+			});
+		}
+
+	</script>
+
+</body>
+
+</html>

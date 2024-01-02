@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SFT Wallet</title>
+  <link rel="stylesheet" href="./css/index.css">
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jquery-i18n-properties/jquery-i18n-properties/jquery.i18n.properties.min.js"></script>
+
+</head>
+
+<body>
+  <div class="header">
+    <div class="logoBox">
+      <img src="../../assets/walletIndex/logo.svg" alt="logo">
+    </div>
+    <div class="languageBox">
+      <div class="custom-select">
+        <div class="select-selected">
+          <img src="../../assets/walletIndex/Language.svg" alt="arrow">
+          <p>Language</p>
+
+          <img src="../../assets/walletIndex/arrow.svg" alt="arrow">
+        </div>
+        <div class="select-items" style="display: none;">
+          <div data-value="en">English</div>
+          <div data-value="zh">中文</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="content">
+   <div class="importAccountBox">
+    <div class="importAccountTitleBox">
+      <img src="../../assets/createAccount/arrow.svg" alt="arrow">
+      <p data-lang="importAccount">Import Account</p>
+    </div>
+    <div class="importAccountTips">
+      <p data-lang="importAccountTips">
+        If you’ve setup one or more account recovery methods, follow the instructions below to import your account.
+      </p>
+    </div>
+    <div class="importAccountContent">
+      <img src="../../assets/importAccount/lock.svg" alt="lock" >
+      <p class="passphrase" data-lang="passphrase">Passphrase</p>
+      <p class="passphraseTips" data-lang="passphraseTips">Make sure you have your 12 word recovery phrase, then click below to begin the recovery process.</p>
+      <a href="../usingPassphrase/index.html">
+        <button class="SecureBtn">
+          <p data-lang="recoverAccount">Reco ver Account</p>
+        </button>
+      </a>
+    </div>
+   </div>
+  </div>
+  <script src="../../assets/js/init.js"></script>
+  <script src="./js/index.js"></script>
+
+</body>
+
+</html>

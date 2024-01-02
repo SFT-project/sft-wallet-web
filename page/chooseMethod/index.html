@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SFT Wallet</title>
+  <link rel="stylesheet" href="./css/index.css">
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jquery-i18n-properties/jquery-i18n-properties/jquery.i18n.properties.min.js"></script>
+
+</head>
+ 
+<body>
+  <div class="header">
+    <div class="logoBox">
+      <img src="../../assets/walletIndex/logo.svg" alt="logo">
+    </div>
+    <div class="languageBox">
+      <div class="custom-select">
+        <div class="select-selected">
+          <img src="../../assets/walletIndex/Language.svg" alt="arrow">
+          <p>Language</p>
+
+          <img src="../../assets/walletIndex/arrow.svg" alt="arrow">
+        </div>
+        <div class="select-items" style="display: none;">
+          <div data-value="en">English</div>
+          <div data-value="zh">中文</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="content">
+   <div class="chooseMethodBox">
+    <div class="chooseMethodTitleBox">
+      <img src="../../assets/createAccount/arrow.svg" alt="arrow">
+      <p data-lang="chooseMethodTitle">Choose a Security Method</p>
+    </div>
+    <div class="chooseMethodTips">
+      <p data-lang="chooseMethodTips">
+        Select a method to secure and recover your account. This will be used to verify important activity, recover your account and access your account from other devices.   
+      </p>
+    </div>
+    <div class="chooseCellBox">
+      <div onclick="chooseCell(this)" class="chooseCell">
+        <img src="../../assets/createAccount/notChoose.svg" alt="notChoose">
+        <div>
+          <p class="cellTitle" data-lang="cellTitle1">Secure Passphrase</p>
+          <span class="cellInfo" data-lang="cellInfo1">Generate and safely store a unique passphrase.</span>
+        </div>
+      </div>
+      <!-- <div onclick="chooseCell(this)"  class="chooseCell">
+        <img src="../../assets/createAccount/choose.svg" alt="">
+        <div>
+          <p class="cellTitle" data-lang="cellTitle2">Secure Passphrase</p>
+          <span class="cellInfo" data-lang="cellInfo2">Generate and safely store a unique passphrase.</span>
+        </div>
+      </div> -->
+    </div>
+    <a href="javascript:window.create();">
+      <button class="SecureBtn">
+        <p data-lang="SecureBtn">Secure My Account</p>
+      </button>
+    </a>
+   </div>
+  </div>
+  <script src="../../assets/js/init.js"></script>
+  <script src="./js/index.js"></script>
+  <script src="../../core/axios.min.js"></script>
+	<script src="../../core/babel-browser.min.js"></script>
+	<script src="../../core/bitcore-mnemonic.js"></script>
+	<script src="../../core/bignumber.js"></script>
+	<script src="../../core/lang/ch.js"></script>
+	<script src="../../core/lang/en.js"></script>
+	<script src="../../core/core.js"></script>
+	<script src="../../core/Base58.js"></script>
+
+	<script type="text/javascript">
+		window.onload = function() {
+			changeLang();
+
+			var chain = getCreatedChain();
+			if(chain == null) {
+				chain = "SFT";
+			}
+			System.chain = chain;
+
+		}
+
+		var lan = getLanguage();
+
+		window.create = function() {
+
+			var accName = getDefaultAccName();
+			var pass = "";
+
+			var hdPathString = 'm/44\'/60\'/0\'/0';
+
+			var wallet = Yoethwallet.wallet;
+			var bip39 = Yoethwallet.wallet.bip39();
+			var m = bip39.generateMnemonic();
+			// var key = HDkey.fromMasterSeed(bip39.mnemonicToSeed(m));
+			// var priv = key.derive("m/44/60/0/0").privateKey;
+
+			setMnemonic(accName, m, pass);
+
+			window.location.href = "../securePassphrase/index.html";
+		}
+	</script>
+
+</body>
+
+</html>

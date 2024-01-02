@@ -1,0 +1,184 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background: #0C0E11;
+
+  .header {
+    width: 100%;
+    height: 7rem;
+    background: rgba(32, 34, 37, 0.80);
+    backdrop-filter: blur(1rem);
+    box-sizing: border-box;
+    padding: 0 10rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 999;
+
+    .logoBox {
+      width: 8.1rem;
+      height: 2.8rem;
+      flex-shrink: 0;
+    }
+
+    .languageBox {
+      width: 13rem;
+      height: 3.2rem;
+      flex-shrink: 0;
+      border-radius: 7.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+      cursor: pointer;
+
+
+
+      .custom-select {
+        position: relative;
+        display: inline-block;
+      }
+
+      .select-selected {
+        padding: 8px 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 13rem;
+        height: 3.2rem;
+        flex-shrink: 0;
+        border-radius: 7.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding: 0 1.2rem;
+        cursor: pointer;
+
+        img {
+          width: 1.4rem;
+          height: 1.4rem;
+        }
+
+        p {
+          color: rgba(255, 255, 255, 0.60);
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 1.4rem;
+        }
+      }
+
+      .select-items {
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 100%;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        display: none;
+
+      }
+
+      .select-items div {
+        padding: 8px 16px;
+        cursor: pointer;
+      }
+
+      .select-items div:hover {
+        background-color: #ddd;
+      }
+
+    }
+  }
+
+  .content {
+    padding: 0 10rem;
+    display: flex;
+    justify-content: space-between;
+    height: calc(100vh - 7rem);
+    overflow: hidden;
+    position: relative;
+    margin-top: 5rem;
+
+    .accountBox {
+      width: 54.4rem;
+      height: 58rem;
+      flex-shrink: 0;
+      border-radius: 2rem;
+      background: #1C1E21;
+      margin: 0 auto;
+      padding: 2rem;
+      box-sizing: border-box;
+
+      .accountTitle {
+        display: flex;
+
+        img {
+          width: 2.4rem;
+          height: 2.4rem;
+          flex-shrink: 0;
+        }
+
+        p {
+          color: #FFF;
+          font-size: 2.4rem;
+          font-style: normal;
+          font-weight: 600;
+          line-height: 2.4rem;
+          margin-left: 1.6rem;
+        }
+      }
+
+      .accountTips {
+        margin-top: 2.4rem;
+
+        p {
+          color: rgba(255, 255, 255, 0.60);
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+        }
+      }
+
+      .learnMore {
+        margin-top: 8rem;
+
+        a {
+          p {
+            color: #FFD12C;
+            font-size: 1.6rem;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 1.6rem;
+            text-decoration-line: underline;
+          }
+        }
+      }
+
+      .startedBtn {
+        width: 49.6rem;
+        height: 5rem;
+        flex-shrink: 0;
+        border-radius: 1rem;
+        background: #FFD12C;
+        border: none;
+        margin-top: 24.2rem;
+
+        p {
+          color: #181719;
+          font-size: 1.6rem;
+          font-style: normal;
+          font-weight: 600;
+        }
+      }
+    }
+
+
+  }
+}

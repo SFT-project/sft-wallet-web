@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SFT Wallet</title>
+  <link rel="stylesheet" href="./css/index.css">
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/gh/jquery-i18n-properties/jquery-i18n-properties/jquery.i18n.properties.min.js"></script>
+
+</head>
+
+<body>
+  <div class="header">
+    <div class="headerLeft">
+      <div class="logoBox">
+        <img src="../../assets/walletIndex/logo.svg" alt="logo">
+      </div>
+      <div class="selectBox">
+        <a href="../balance/index.html">
+          <div class="selectBoxCell ">
+            <img src="../../assets/balance/walletNot.svg" alt="">
+            <p>Wallet</p>
+          </div>
+        </a>
+        <div class="selectBoxCell currSelect">
+          <img src="../../assets/balance/account.svg" alt="">
+          <p>Account</p>
+        </div>
+      </div>
+    </div>
+    <div class="languageBox">
+      <div class="addressBox">
+        <img class="addressIcon" src="../../assets/balance/address.svg" alt="address">
+        <p id="lab_addr_1">...</p>
+        <img class="arrowIcon" src="../../assets/balance/arrow.svg" alt="arrow">
+      </div>
+      <div class="custom-select">
+        <div class="select-selected">
+          <img src="../../assets/walletIndex/Language.svg" alt="arrow">
+          <p>Language</p>
+          <img src="../../assets/walletIndex/arrow.svg" alt="arrow">
+        </div>
+        <div class="select-items" style="display: none;">
+          <div data-value="en">English</div>
+          <div data-value="zh">中文</div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  <div class="accountPop" style="display: none">
+    <p class="accountPopTitle" data-lang="Account">
+      Account
+    </p>
+    <div class="accountInfoBox">
+      <div class="accountInfoBoxLeft">
+        <p id="lab_addr_2">...</p>
+        <span id="lab_balance_1">0 SPD</span>
+      </div>
+      <div class="copyBtn" onclick="javascript:window.copyAddr();">
+        <img src="../../assets/balance/copy.svg" alt="copy">
+      </div>
+      <div class="viewBtn">
+        <img src="../../assets/balance/view.svg" alt="view">
+      </div>
+    </div>
+    <a href="../importAccount/index.html">
+      <button class="importAccountBtn">
+        <img src="../../assets/balance/import.svg" alt="import">
+        <p data-lang="importAccount">Import Account</p>
+      </button>
+    </a>
+    <a href="../createAccount/index.html">
+      <button class="createNewAccountBtn">
+        <img src="../../assets/balance/create.svg" alt="import">
+        <p data-lang="createNewAccount">Create New Account</p>
+      </button>
+    </a>
+  </div>
+  <div class="content">
+    <div class="accountBox">
+      <div class="accountBoxTitle">
+        <img src="../../assets/account/account.svg" alt="account">
+        <p data-lang="accountDetails">
+          Account Details
+        </p>
+      </div>
+      <div class="walletAddressBox">
+        <p class="walletAddressTitle" data-lang="walletAddressTitle">Wallet address</p>
+        <div class="walletAddress">
+          <p id="lab_addr_3">...</p>
+          <img src="../../assets/balance/copy.svg" alt="copy" onclick="javascript:window.copyAddr();">
+        </div>
+      </div>
+      <div class="walletBalanceBox">
+        <p class="walletBalanceTitle" data-lang="walletBalanceTitle">Wallet Balance</p>
+        <p id="lab_balance_2"></p>
+      </div>
+      <div class="hr"></div>
+      <div class="securityBox">
+        <div class="securityTitleBox">
+          <img src="../../assets/account/safe.svg" alt="safe">
+          <p class="securityTitle" data-lang="securityTitle">Security & Recovery</p>
+        </div>
+        <div class="removeBtnBox" onclick="javascript:window.removeAccount();">
+          <img src="../../assets/account/del.svg" alt="del">
+          <p data-lang="removeText">Remove Account from Wallet</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="../../assets/js/init.js"></script>
+  <script src="./js/index.js"></script>
+  <script src="../../core/axios.min.js"></script>
+	<script src="../../core/babel-browser.min.js"></script>
+	<script src="../../core/bitcore-mnemonic.js"></script>
+	<script src="../../core/bignumber.js"></script>
+	<script src="../../core/lang/ch.js"></script>
+	<script src="../../core/lang/en.js"></script>
+	<script src="../../core/core.js"></script>
+	<script src="../../core/Base58.js"></script>
+
+	<script type="text/javascript">
+		window.onload = function() {
+			changeLang();
+
+			var chain = getCreatedChain();
+			if(chain == null) {
+				chain = "SFT";
+			}
+			System.chain = chain;
+
+			var curr = getCurrent();
+
+			document.getElementById("lab_addr_1").innerHTML = lessAddr(curr.addr, 12);
+			document.getElementById("lab_addr_2").innerHTML = lessAddr(curr.addr, 12);
+			document.getElementById("lab_addr_3").innerHTML = lessAddr(curr.addr, 12);
+			
+			rpc_getBalance(curr.addr, function(data_bal) {
+				var x = new BigNumber(data_bal);
+				x /= 1e18;
+				document.getElementById("lab_balance_1").innerHTML = x.toFixed(4) + " SFT";
+				document.getElementById("lab_balance_2").innerHTML = x.toFixed(4) + " SFT";
+			}, function(err_bal) {
+
+			})
+		}
+
+		window.removeAccount = function() {
+			localStorage.clear();
+			window.location.href = "../walletIndex/index.html"
+		}
+
+		window.copyAddr = function() {
+			var curr = getCurrent();
+			var oInput = document.createElement('input');
+            oInput.value = curr.addr;
+            document.body.appendChild(oInput);
+            oInput.select(); // 选择对象
+            document.execCommand("Copy"); // 执行浏览器复制命令
+            oInput.className = 'oInput';
+            oInput.style.display='none';
+            showToast("success", "Copied");
+		}
+	</script>
+
+</body>
+
+</html>

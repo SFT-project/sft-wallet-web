@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SFT Wallet</title>
+  <link rel="stylesheet" href="./css/index.css">
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jquery-i18n-properties/jquery-i18n-properties/jquery.i18n.properties.min.js"></script>
+
+</head>
+
+<body>
+  <div class="header">
+    <div class="logoBox">
+      <img src="../../assets/walletIndex/logo.svg" alt="logo">
+    </div>
+    <div class="languageBox">
+      <div class="custom-select">
+        <div class="select-selected">
+          <img src="../../assets/walletIndex/Language.svg" alt="arrow">
+          <p>Language</p>
+
+          <img src="../../assets/walletIndex/arrow.svg" alt="arrow">
+        </div>
+        <div class="select-items" style="display: none;">
+          <div data-value="en">English</div>
+          <div data-value="zh">中文</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="content">
+   <div class="verifyPhraseBox">
+    <div class="verifyPhraseTitleBox">
+      <img src="../../assets/createAccount/arrow.svg" alt="arrow">
+      <p data-lang="verifyPhraseTitle">Verify Phrase</p>
+    </div>
+    <div class="verifyPhraseTips">
+      <p data-lang="verifyPhraseTips">
+        Arrange the words in the same way as they were originally
+      </p>
+    </div>
+    <div class="choosePassphraseBox">
+      <div class="choosePassphraseCell" id="lab_m1"></div>
+      <div class="choosePassphraseCell" id="lab_m2"></div>
+      <div class="choosePassphraseCell" id="lab_m3"></div>
+      <div class="choosePassphraseCell" id="lab_m4"></div>
+      <div class="choosePassphraseCell" id="lab_m5"></div>
+      <div class="choosePassphraseCell" id="lab_m6"></div>
+      <div class="choosePassphraseCell" id="lab_m7"></div>
+      <div class="choosePassphraseCell" id="lab_m8"></div>
+      <div class="choosePassphraseCell" id="lab_m9"></div>
+      <div class="choosePassphraseCell" id="lab_m10"></div>
+      <div class="choosePassphraseCell" id="lab_m11"></div>
+      <div class="choosePassphraseCell" id="lab_m12"></div>
+    </div>
+    <div class="passphraseBox">
+      <div class="passphraseCell" id="lab_rm1"></div>
+      <div class="passphraseCell" id="lab_rm2"></div>
+      <div class="passphraseCell" id="lab_rm3"></div>
+      <div class="passphraseCell" id="lab_rm4"></div>
+      <div class="passphraseCell" id="lab_rm5"></div>
+      <div class="passphraseCell" id="lab_rm6"></div>
+      <div class="passphraseCell" id="lab_rm7"></div>
+      <div class="passphraseCell" id="lab_rm8"></div>
+      <div class="passphraseCell" id="lab_rm9"></div>
+      <div class="passphraseCell" id="lab_rm10"></div>
+      <div class="passphraseCell" id="lab_rm11"></div>
+      <div class="passphraseCell" id="lab_rm12"></div>
+    </div>
+ 
+    <a href="javascript:window.clickConfirm();">
+      <button class="SecureBtn">
+        <p data-lang="verify">Verify & Complete</p>
+      </button>
+    </a>
+    <a href="../walletIndex/index.html">
+      <button class="cancelBtn">
+        <p data-lang="startOver">Start over</p>
+      </button>
+    </a>
+   </div>
+  </div>
+  <script src="../../assets/js/init.js"></script>
+  <script src="./js/index.js"></script>
+	<script src="../../core/axios.min.js"></script>
+	<script src="../../core/babel-browser.min.js"></script>
+	<script src="../../core/bitcore-mnemonic.js"></script>
+	<script src="../../core/bignumber.js"></script>
+	<script src="../../core/lang/ch.js"></script>
+	<script src="../../core/lang/en.js"></script>
+	<script src="../../core/core.js"></script>
+	<script src="../../core/Base58.js"></script>
+
+	<script type="text/javascript">
+		var lan = getLanguage();
+
+		var ws = [];
+		var bs = [false, false, false, false, false, false, false, false, false, false, false, false];
+
+		window.subDirEntry = null;
+
+		window.onload = function() {
+			changeLang();
+			var mne = getMnemonic();
+			if (mne == null) {
+				return;
+			}
+			ws = mne.mne.split(' ');
+			for (var i = 0; i < 50; i++) {
+				var a = Math.floor(Math.random() * 12);
+				var b = Math.floor(Math.random() * 12);
+				var tmp = ws[a];
+				ws[a] = ws[b];
+				ws[b] = tmp;
+			}
+
+			for (var j = 1; j <= 12; j++) {
+				document.getElementById("lab_rm" + j).innerHTML = ws[j - 1];
+			}
+		}
+
+		window.clickConfirm = function() {
+			var mne = getMnemonic();
+			if (mne == null) {
+				showToast("failure", "invalid mnemonic")
+				// alert("invalid mnemonic","no permission", "error");
+				return;
+			}
+			var ts = "";
+			for (var i = 1; i <= 12; i++) {
+				var ss = document.getElementById("lab_m" + i).innerHTML.split('.');
+				if(ss.length < 2) {
+					return;
+				}
+				var sss = ss[1].split('<');
+				ts += sss[0];
+				if (i < 12) {
+					ts += " ";
+				}
+			}
+			if (ts != mne.mne) {
+				// alert("invalid mnemonic");
+				showToast("failure", "invalid mnemonic")
+				return;
+			} else {
+
+				var wallet = Yoethwallet.wallet;
+				var bip39 = Yoethwallet.wallet.bip39();
+				var HDKey = Yoethwallet.wallet.HDKey();
+
+				var key = HDKey.fromMasterSeed(bip39.mnemonicToSeed(mne.mne));
+				var priv = key.derive("m/44\'/60\'/0\'/0/0").privateKey;
+
+				wallet.fromPrivateKey(priv, function(err, keystore) {
+					if (err) {
+						// alert(err);
+
+						showToast("failure", err)
+						return;
+					}
+					//var addr = Base58.fromAddr(keystore.getHexAddress(true));
+					var chain = getCreatedChain();
+					if(chain == null) {
+						chain = "SFT";
+					}
+
+					setActiveChain(chain);
+
+					newAcc(mne.name, keystore.getHexAddress(true), chain);
+					setCurrent(mne.name, keystore.getHexAddress(true));
+					setAddrMnemonic(keystore.getHexAddress(true), mne.mne)
+
+					window.location.href = "../balance/index.html";
+				});
+			}
+		}
+
+	</script>
+
+</body>
+
+</html>
