@@ -311,7 +311,7 @@
 				return;
 			}
 
-			if(amount > bal_sft) {
+			if(amount < bal_sft) {
 				showToast("failure", "insufficient balance");
 				return;
 			}
